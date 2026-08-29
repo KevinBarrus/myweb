@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#faf5ed" />
+    <title>Kevin864 — 开发 / 研究 / 内容创作</title>
+    <meta name="description" content="Kevin864 的个人网站，记录技术、研究、项目与思考" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar shell" aria-label="主导航">
+      <a class="nav-link" href="#about">关于</a>
+      <a class="nav-link language-link" href="./en/">English</a>
+      <nav class="socials" aria-label="社交链接">
+        <a class="social-icon" href="#" aria-label="GitHub"><img src="https://cdn.simpleicons.org/github" alt="" /></a>
+        <a class="social-icon" href="#" aria-label="X"><img src="https://cdn.simpleicons.org/x" alt="" /></a>
+        <a class="social-icon" href="#" aria-label="哔哩哔哩"><img src="https://cdn.simpleicons.org/bilibili" alt="" /></a>
+        <a class="social-icon" href="#" aria-label="抖音"><img src="https://cdn.simpleicons.org/tiktok" alt="" /></a>
+        <a class="social-icon" href="#" aria-label="微信公众号"><img src="https://cdn.simpleicons.org/wechat" alt="" /></a>
+        <a class="social-icon" href="#" aria-label="YouTube"><img src="https://cdn.simpleicons.org/youtube" alt="" /></a>
+        <a class="social-icon" href="#" aria-label="小红书"><img src="https://cdn.simpleicons.org/xiaohongshu" alt="" /></a>
+        <a class="social-icon" href="#" aria-label="知乎"><img src="https://cdn.simpleicons.org/zhihu" alt="" /></a>
+        <a class="social-icon" href="#" aria-label="CSDN"><img src="https://cdn.simpleicons.org/csdn" alt="" /></a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero shell" aria-labelledby="name">
+        <div class="hero-copy">
+          <!-- <p class="eyebrow">PERSONAL ARCHIVE · 2026</p>  -->
+          <h1 id="name">Kevin864</h1>
+          <p class="role">开发者 <span>/</span> 研究者 <span>/</span> 内容创作者</p>
+          <div class="hero-rule"></div>
+          <div class="project-slot" aria-label="精选项目预留区域">
+            <span>个人项目</span>
+            <span class="slot-note">Coming soon</span>
+          </div>
+        </div>
+
+        <div class="hero-art" aria-label="个人头像">
+          <div class="art-glow"></div>
+          <img src="./pic/avatar.png" alt="轻音少女合照" />
+        </div>
+      </section>
+
+      <section class="tag-section shell" aria-labelledby="tag-title">
+        <div class="section-heading">
+          <p class="eyebrow">EXPLORE BY TOPIC</p>
+          <h2 id="tag-title">文章标签</h2>
+        </div>
+        <div class="tag-grid" id="featured-tags"></div>
+      </section>
+
+    </main>
+
+    <dialog class="tag-dialog" id="tag-dialog" aria-labelledby="all-tags-title">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">ALL TOPICS</p>
+          <h2 id="all-tags-title">全部标签</h2>
+        </div>
+        <button class="close-button" id="close-tags" type="button" aria-label="关闭">×</button>
+      </div>
+      <div class="all-tags" id="all-tags"></div>
+    </dialog>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
