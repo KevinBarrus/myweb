@@ -5,8 +5,7 @@ const tags = [
   "AI工具", "后训练", "游戏", "钢琴演奏", "斯诺克比赛解说", "斯诺克游戏集锦",
 ];
 
-// Articles are generated from local Markdown files in the next content phase.
-const articles = [];
+let articles = [];
 const filterContainer = document.querySelector("#tag-filter");
 const articleList = document.querySelector("#article-list");
 const searchInput = document.querySelector("#article-search");
@@ -15,6 +14,7 @@ let activeTag = "全部";
 function createFilterButton(label, value = label) {
   const button = document.createElement("button");
   button.type = "button";
+  if (value === "全部") button.className = "tag-label";
   button.textContent = label;
   button.setAttribute("aria-pressed", value === activeTag);
   button.addEventListener("click", () => {
@@ -55,7 +55,7 @@ function renderArticles() {
     yearArticles.forEach((article) => {
       const row = document.createElement("a");
       row.className = "article-row";
-      row.href = article.url;
+      row.href = `./article.html?slug=${encodeURIComponent(article.slug)}`;
       row.innerHTML = `<time class="article-date" datetime="${article.date}">${article.date.slice(5)}</time><span class="article-title">${article.title}</span><span class="article-tags">${article.tags.map((tag) => `<span class="article-tag">${tag}</span>`).join("")}</span>`;
       group.append(row);
     });
@@ -65,4 +65,13 @@ function renderArticles() {
 
 searchInput.addEventListener("input", renderArticles);
 renderFilters();
-renderArticles();
+fetch("./articles/index.json")
+  .then((response) => {
+    if (!response.ok) throw new Error(`Article index failed: ${response.status}`);
+    return response.json();
+  })
+  .then((items) => {
+    articles = items;
+    renderArticles();
+  })
+  .catch(() => renderArticles());
