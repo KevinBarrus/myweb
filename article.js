@@ -160,7 +160,7 @@ if (!slug) {
     return fetchResource(`./${item.source}`).then((response) => response.text()).then((source) => ({ item, source }));
   }).then(({ item, source }) => {
     const parsed = parseFrontmatter(source);
-    const tags = Array.isArray(parsed.data.tags) ? parsed.data.tags : item.tags;
+    const tags = item.tags || [];
     const title = parsed.data.title || item.title;
     const createdAt = parsed.data.createdAt || item.createdAt || item.date;
     const updatedAt = (typeof parsed.data.updatedAt === "string" ? parsed.data.updatedAt : "") || item.updatedAt || "";
