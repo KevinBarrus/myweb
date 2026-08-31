@@ -44,26 +44,23 @@
         </div>
       </section>
 
-      <section class="tag-section shell" aria-labelledby="tag-title">
-        <div class="section-heading">
-          <p class="eyebrow">EXPLORE BY TOPIC</p>
-          <h2 id="tag-title">文章标签</h2>
+      <section class="archive-section shell" aria-labelledby="archive-title">
+        <div class="archive-heading">
+          <div class="section-heading">
+            <p class="eyebrow">WRITING ARCHIVE</p>
+            <h2 id="archive-title">文章</h2>
+          </div>
+          <label class="search-box">
+            <span class="sr-only">搜索文章</span>
+            <input id="article-search" type="search" placeholder="搜索文章" />
+            <span aria-hidden="true">⌕</span>
+          </label>
         </div>
-        <div class="tag-grid" id="featured-tags"></div>
+        <div class="tag-filter" id="tag-filter" aria-label="按标签筛选文章"></div>
+        <div class="article-list" id="article-list" aria-live="polite"></div>
       </section>
 
     </main>
-
-    <dialog class="tag-dialog" id="tag-dialog" aria-labelledby="all-tags-title">
-      <div class="dialog-head">
-        <div>
-          <p class="eyebrow">ALL TOPICS</p>
-          <h2 id="all-tags-title">全部标签</h2>
-        </div>
-        <button class="close-button" id="close-tags" type="button" aria-label="关闭">×</button>
-      </div>
-      <div class="all-tags" id="all-tags"></div>
-    </dialog>
 
     <script src="./script.js"></script>
   </body>
