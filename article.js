@@ -1,5 +1,7 @@
 const titleElement = document.querySelector("#article-title");
-const metaElement = document.querySelector("#article-meta");
+const publishedElement = document.querySelector("#article-published");
+const tagsElement = document.querySelector("#article-tags");
+const updatedElement = document.querySelector("#article-updated");
 const contentElement = document.querySelector("#article-content");
 const tocElement = document.querySelector("#toc-list");
 const slug = new URLSearchParams(window.location.search).get("slug");
@@ -14,15 +16,24 @@ function parseFrontmatter(source) {
     if (listItem && currentList) currentList.push(listItem[1].trim());
     const field = line.match(/^([\w-]+):\s*(.*)$/);
     if (!field) return;
-    currentList = field[2] ? null : [];
-    data[field[1]] = field[2] || currentList;
+    const value = field[2].trim();
+    currentList = value ? null : [];
+    data[field[1]] = value || currentList;
   });
   return { data, body: source.slice(match[0].length) };
 }
 
-function showError() {
+function showError(error) {
+  console.error("Article loading failed", error);
   titleElement.textContent = "文章加载失败";
-  contentElement.innerHTML = '<p class="article-error">暂时无法读取这篇文章。请确认文章文件已提交，并通过本地 HTTP 服务或部署后的网址访问。</p>';
+  const message = window.location.protocol === "file:"
+    ? "请通过本地 HTTP 服务访问：python3 -m http.server 8000"
+    : `请确认文章索引和 Markdown 文件已部署（${error?.message || "未知错误"}）。`;
+  contentElement.textContent = "";
+  const errorElement = document.createElement("p");
+  errorElement.className = "article-error";
+  errorElement.textContent = message;
+  contentElement.append(errorElement);
 }
 
 function addHeadingIdsAndToc() {
@@ -45,8 +56,36 @@ function addHeadingIdsAndToc() {
     link.href = `#${id}`;
     link.textContent = heading.textContent;
     link.className = `toc-level-${heading.tagName.slice(1)}`;
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      heading.scrollIntoView({ behavior: "smooth", block: "start" });
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+    });
     tocElement.append(link);
   });
+
+  const headingList = Array.from(headings);
+  const links = Array.from(tocElement.querySelectorAll("a"));
+  const updateActiveHeading = () => {
+    const current = headingList.reduce((active, heading) => {
+      return heading.getBoundingClientRect().top <= 132 ? heading : active;
+    }, headingList[0]);
+    const activeLink = links.find((link) => link.hash === `#${current.id}`);
+    links.forEach((link) => link.removeAttribute("aria-current"));
+    activeLink?.setAttribute("aria-current", "true");
+  };
+  let ticking = false;
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      updateActiveHeading();
+      ticking = false;
+    });
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  updateActiveHeading();
+
 }
 
 function addCodeCopyButtons() {
@@ -56,8 +95,12 @@ function addCodeCopyButtons() {
     button.className = "code-copy";
     button.textContent = "复制";
     button.addEventListener("click", async () => {
-      await navigator.clipboard.writeText(block.querySelector("code")?.textContent ?? "");
-      button.textContent = "已复制";
+      try {
+        await navigator.clipboard.writeText(block.querySelector("code")?.textContent ?? "");
+        button.textContent = "已复制";
+      } catch {
+        button.textContent = "复制失败";
+      }
       window.setTimeout(() => { button.textContent = "复制"; }, 1200);
     });
     block.append(button);
@@ -71,39 +114,60 @@ function removeDuplicateTitle(title) {
   if (normalized === title.trim()) firstHeading.remove();
 }
 
+function renderMath() {
+  if (typeof renderMathInElement !== "function") return;
+  renderMathInElement(contentElement, {
+    throwOnError: false,
+    delimiters: [
+      { left: "$$", right: "$$", display: true },
+      { left: "\\[", right: "\\]", display: true },
+      { left: "$", right: "$", display: false },
+      { left: "\\(", right: "\\)", display: false },
+    ],
+  });
+}
+
+function fetchResource(path) {
+  return fetch(new URL(path, document.baseURI)).then((response) => {
+    if (!response.ok) throw new Error(`${path} 返回 HTTP ${response.status}`);
+    return response;
+  });
+}
+
 if (!slug) {
-  showError();
+  showError(new Error("缺少文章 slug"));
 } else {
-  Promise.all([
-    fetch("./articles/index.json").then((response) => response.json()),
-  ]).then(([items]) => {
+  fetchResource("./articles/index.json").then((response) => response.json()).then((items) => {
     const item = items.find((article) => article.slug === slug);
-    if (!item) throw new Error("Article not found");
-    return fetch(`./${item.source}`).then((response) => response.text()).then((source) => ({ item, source }));
+    if (!item) throw new Error(`找不到文章：${slug}`);
+    return fetchResource(`./${item.source}`).then((response) => response.text()).then((source) => ({ item, source }));
   }).then(({ item, source }) => {
     const parsed = parseFrontmatter(source);
     const tags = Array.isArray(parsed.data.tags) ? parsed.data.tags : item.tags;
     const title = parsed.data.title || item.title;
-    const date = parsed.data.date || item.date;
+    const createdAt = parsed.data.createdAt || item.createdAt || item.date;
+    const updatedAt = (typeof parsed.data.updatedAt === "string" ? parsed.data.updatedAt : "") || item.updatedAt || "";
     titleElement.textContent = title;
     document.title = `${title} — Kevin864`;
-    const dateElement = document.createElement("time");
-    dateElement.dateTime = date;
-    dateElement.textContent = date;
-    metaElement.append(dateElement);
-    const tagsElement = document.createElement("div");
-    tagsElement.className = "article-meta-tags";
+    publishedElement.dateTime = createdAt;
+    publishedElement.textContent = createdAt;
     tags.forEach((tag) => {
       const tagElement = document.createElement("span");
       tagElement.className = "article-meta-tag";
-      tagElement.textContent = `#${tag}`;
+      tagElement.textContent = tag;
       tagsElement.append(tagElement);
     });
-    metaElement.append(tagsElement);
-    contentElement.innerHTML = marked.parse(parsed.body, { gfm: true, breaks: false });
+    if (!window.marked?.parse) throw new Error("Markdown 解析器加载失败");
+    contentElement.innerHTML = window.marked.parse(parsed.body, { gfm: true, breaks: false });
     removeDuplicateTitle(title);
-    Prism.highlightAllUnder(contentElement);
+    if (window.Prism) Prism.highlightAllUnder(contentElement);
+    renderMath();
     addHeadingIdsAndToc();
     addCodeCopyButtons();
+    if (updatedAt && updatedAt !== createdAt) {
+      updatedElement.textContent = `最新更新时间：${updatedAt}`;
+    } else {
+      updatedElement.hidden = true;
+    }
   }).catch(showError);
 }
