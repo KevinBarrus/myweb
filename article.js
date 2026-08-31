@@ -4,6 +4,7 @@ const tagsElement = document.querySelector("#article-tags");
 const updatedElement = document.querySelector("#article-updated");
 const contentElement = document.querySelector("#article-content");
 const tocElement = document.querySelector("#toc-list");
+const tocContainer = document.querySelector("#article-toc");
 const slug = new URLSearchParams(window.location.search).get("slug");
 
 function parseFrontmatter(source) {
@@ -66,13 +67,24 @@ function addHeadingIdsAndToc() {
 
   const headingList = Array.from(headings);
   const links = Array.from(tocElement.querySelectorAll("a"));
+  const revealActiveLink = (link) => {
+    if (tocContainer.scrollHeight <= tocContainer.clientHeight) return;
+    const linkBox = link.getBoundingClientRect();
+    const containerBox = tocContainer.getBoundingClientRect();
+    const target = tocContainer.scrollTop + linkBox.top - containerBox.top - (tocContainer.clientHeight - linkBox.height) / 2;
+    tocContainer.scrollTo({ top: target, behavior: "smooth" });
+  };
+  let activeLink;
   const updateActiveHeading = () => {
     const current = headingList.reduce((active, heading) => {
       return heading.getBoundingClientRect().top <= 132 ? heading : active;
     }, headingList[0]);
-    const activeLink = links.find((link) => link.hash === `#${current.id}`);
+    const nextActiveLink = links.find((link) => link.getAttribute("href") === `#${current.id}`);
+    if (nextActiveLink === activeLink) return;
     links.forEach((link) => link.removeAttribute("aria-current"));
+    activeLink = nextActiveLink;
     activeLink?.setAttribute("aria-current", "true");
+    if (activeLink) revealActiveLink(activeLink);
   };
   let ticking = false;
   const onScroll = () => {
@@ -84,6 +96,11 @@ function addHeadingIdsAndToc() {
     });
   };
   window.addEventListener("scroll", onScroll, { passive: true });
+  tocContainer.addEventListener("wheel", (event) => {
+    const atTop = tocContainer.scrollTop <= 0;
+    const atBottom = tocContainer.scrollTop + tocContainer.clientHeight >= tocContainer.scrollHeight - 1;
+    if (!tocContainer.scrollHeight || (event.deltaY < 0 && atTop) || (event.deltaY > 0 && atBottom)) event.preventDefault();
+  }, { passive: false });
   updateActiveHeading();
 
 }
