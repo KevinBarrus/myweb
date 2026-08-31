@@ -3,11 +3,59 @@ title: 字节 Agent 开发一面手撕解析
 createdAt: 2026-08-27 20:30
 updatedAt:
 tags:
-  - Agent开发
-  - 项目讲解
+  - 面试
+  - 算法
 ---
 
 ## 2026.8.27 字节 Agent 开发一面手撕解析
+
+### 题目
+
+```text
+合并嵌套 JSON
+
+Question description
+
+给定两个嵌套结构的 JSON 数据，实现合并函数。规则：
+
+键值对（dict）：递归合并相同 key，仅在一个字典中的 key 直接保留
+
+列表（list）：拼接（json1 列表 + json2 列表）
+
+整数 / 浮点数（int/float）：相加（json1 值 + json2 值）
+
+字符串（str）：拼接（json1 字符串 + json2 字符串）
+
+布尔值（bool）：取逻辑真（只要其一为 True 则结果为 True）
+
+其他类型（如 None）：以 json2 的值覆盖 json1。
+
+要求：返回合并后的新 JSON，不修改原始数据。
+
+示例 1（多类型合并含列表）：
+
+输入：
+
+json1 = {"a": 1, "b": [1,2,3], "c": False, "d": 2.5}
+json2 = {"a": 2, "b": [3,4,5], "c": True, "d": 3.5}
+
+输出：
+
+{"a": 3, "b": [1,2,3,4,5], "c": True, "d": 6.0}
+
+示例 2（多层嵌套 + 列表）：
+
+输入：
+
+json1 = {"x": {"y": {"z": [10,20], "m": [1]}}}
+json2 = {"x": {"y": {"z": [20,30], "m": [2], "n": None}}}
+
+输出：
+
+{"x": {"y": {"z": [10,20,30], "m": [1,2], "n": None}}}
+```
+
+说明：面试题将输入称为“JSON”，但原始样例使用了 `False`、`True`、`None`，它们是 Python 字面量，不是严格 JSON 文本中的 `false`、`true`、`null`。下文将 `json1`、`json2` 视为已解析的 Python 嵌套对象，并用 `ast.literal_eval` 复现该题面的输入格式；若输入是严格 JSON 文本，应改用 `json.loads`。
 
 注：关于列表合并规则，题目描述为“拼接”，但给定样例表现出重复元素需要去除，因此本文按照样例实现为“稳定拼接去重”，即保留首次出现的元素并维持原有顺序。
 
@@ -15,33 +63,16 @@ tags:
 
 JSON 具有递归结构：一个 `dict` 的 `value` 仍然可能是 `dict` 或 `list`。因此，当两个输入在同一 `key` 上均存在 `value` 时，无法仅在当前层决定最终结果，而需要对两个 `value` 再次应用相同的合并规则。由此可以自然地将 `merge_json(a, b)` 定义为递归函数。
 
-六种情况，可以按照以下决策树进行解决：
+六种情况及其处理规则如下：
 
-```text
-a、b 都是 dict
-    ↓
-递归合并
-
-a、b 都是 list
-    ↓
-拼接 + 去重
-
-a、b 都是 bool
-    ↓
-a or b
-
-a、b 都是 int / float
-    ↓
-a + b
-
-a、b 都是 str
-    ↓
-a + b
-
-其他情况
-    ↓
-b 覆盖 a
-```
+| 条件 | 结果 |
+| --- | --- |
+| `a`、`b` 都是 `dict` | 递归合并 |
+| `a`、`b` 都是 `list` | 拼接后稳定去重 |
+| `a`、`b` 都是 `bool` | `a or b` |
+| `a`、`b` 都是 `int` / `float` | `a + b` |
+| `a`、`b` 都是 `str` | `a + b` |
+| 其他情况 | `b` 覆盖 `a` |
 
 ### 2. 关键边界条件
 
@@ -215,12 +246,8 @@ b = a
 不要把它理解成 `a` 里面存着 `[1,2,3]`，b 又复制了一份 `[1,2,3]`。实际上更接近：
 
 ```text
-
-        ┌─────────────┐
-a ─────→│ [1, 2, 3]   │  Python 堆对象
-        └─────────────┘
-             ↑
-b ───────────┘
+a --> [1, 2, 3]  (Python heap object)
+b --> [1, 2, 3]  (same object)
 ```
 
 所以 `a is b` 结果为 `True`。用 C++ 的思维近似理解：
@@ -245,29 +272,16 @@ a = [
 
 你可能下意识想象：
 
-```python
-a
-↓
-┌─────────────┐
-│ [1, 2]       │
-│ [3, 4]       │
-└─────────────┘
+```text
+a --> [[1, 2], [3, 4]]
 ```
 
 但更准确的模型是：
 
 ```text
-                 ┌─────────┐
-             ┌──→│ [1, 2]  │
-             │   └─────────┘
-             │
-a ──→ ┌──────┴──────┐
-      │ ref1 │ ref2  │
-      └────────┬─────┘
-               │
-               └──→┌─────────┐
-                   │ [3, 4]  │
-                   └─────────┘
+a --> outer list
+outer list[0] --> [1, 2]
+outer list[1] --> [3, 4]
 ```
 
 外层 `list` 保存的是指向内部 Python 对象的引用。可以粗略类比 C++：
@@ -298,8 +312,8 @@ Python 做的事情可以理解成：
 **第一步：创建新的外层 list**
 
 ```text
-a → List A
-b → List B
+a --> List A
+b --> List B
 ```
 
 所以 `a is b` 结果为 `False`。
@@ -309,18 +323,10 @@ b → List B
 最终：
 
 ```text
-
-                  ┌────────┐
-             ┌───→│ [1, 2] │←───┐
-             │    └────────┘    │
-             │                  │
-a → ┌────────┴─┐          ┌─────┴─────┐ ← b
-    │ ref1 ref2│          │ ref1 ref2 │
-    └────────┬─┘          └─────┬─────┘
-             │                  │
-             └───→┌────────┐←───┘
-                  │ [3, 4] │
-                  └────────┘
+a --> List A
+b --> List B
+List A[0] --> [1, 2] <-- List B[0]
+List A[1] --> [3, 4] <-- List B[1]
 ```
 
 所以 `a is b` 结果为 `False`，但是 `a[0] is b[0]` 结果为 `True`。这就是所谓的浅拷贝只复制第一层。
@@ -350,11 +356,8 @@ b[0].append(100)
 因为实际上发生的是：
 
 ```text
-a[0] ──┐
-       ↓
-     [1, 2]  ← append(100)
-       ↑
-b[0] ──┘
+a[0] --> [1, 2] <-- b[0]
+                 append(100)
 ```
 
 #### 3.5 这个操作为什么不会影响 `a`？
@@ -362,14 +365,10 @@ b[0] ──┘
 此时 `a` 不会变化，因为我们没有修改原来的 `[1, 2]`，只是让 `b[0]` 换了一个引用。原来：
 
 ```text
-a[0] ──┐
-       ↓
-      [1, 2]
-       ↑
-b[0] ──┘
+a[0] --> [1, 2] <-- b[0]
 ```
 
-执行 `b[0] = [100, 200]` 之后：`a[0] → [1, 2]`、`b[0] → [100, 200]`，二者不再指向同一个对象。所以：
+执行 `b[0] = [100, 200]` 之后，`a[0]` 指向 `[1, 2]`，`b[0]` 指向 `[100, 200]`；二者不再指向同一个对象。所以：
 
 ```python
 print(a)
@@ -392,28 +391,17 @@ b = copy.deepcopy(a)
 它不只是创建新的外层 `List B`，而是继续往下递归。发现：
 
 ```text
-a
-↓
-list
-↓
-里面还有 list
+a --> list --> nested list
 ```
 
 于是内部 `list` 也复制。最终：
 
 ```text
-a → List A
-     │
-     ├────→ List X [1, 2]
-     │
-     └────→ List Y [3, 4]
+a --> List A --> List X  [1, 2]
+             --> List Y  [3, 4]
 
-
-b → List B
-     │
-     ├────→ List X' [1, 2]
-     │
-     └────→ List Y' [3, 4]
+b --> List B --> List X' [1, 2]
+             --> List Y' [3, 4]
 ```
 
 因此：
@@ -443,11 +431,7 @@ a.data = new vector<int>{1, 2, 3};
 浅拷贝类似 `Node b = a`，结果：
 
 ```text
-a.data ──┐
-         ↓
-      vector{1, 2, 3}
-         ↑
-b.data ──┘
+a.data --> vector{1, 2, 3} <-- b.data
 ```
 
 即 `a.data == b.data`。
@@ -461,8 +445,8 @@ b.data = new vector<int>(*a.data);
 
 结果：
 ```text
-a.data → vector A {1, 2, 3}
-b.data → vector B {1, 2, 3}
+a.data --> vector A {1, 2, 3}
+b.data --> vector B {1, 2, 3}
 ```
 Python 的 `copy.copy(a)` 和 `copy.deepcopy(a)` 的本质区别就可以这样理解。
 
@@ -480,29 +464,18 @@ a = {
 对象关系实际上是：
 
 ```text
-dict
- ↓
-list
- ↓
-dict
- ↓
-str
+dict --> list --> dict --> str
 ```
 
 `deepcopy(a)` 不是简单地分配一块连续内存后执行 `memcpy(...)`，而更接近：
 
 ```text
-复制外层 dict
-    ↓
-发现 value 是 list
-    ↓
-复制 list
-    ↓
-发现元素是 dict
-    ↓
-复制 dict
-    ↓
-继续处理里面对象
+copy outer dict
+  --> find a list value
+  --> copy list
+  --> find a dict element
+  --> copy dict
+  --> continue recursively
 ```
 
 也就是说 `deepcopy` 是递归复制对象图，而不是简单复制一段连续内存。而且 Python 对象本来也不保证 `dict` + `list` + `dict` 连续存储在一块内存里。
@@ -538,16 +511,8 @@ json1 = {
 你写 `res = json1.copy()`，结构实际上是：
 
 ```text
-json1 →  外层 dict A
-              │
-              ↓
-          config dict
-              │
-              ↓
-          ports list
-              ↑
-              │
-res →    外层 dict B
+json1 --> outer dict A --> config dict --> ports list
+res   --> outer dict B --> config dict --> ports list
 ```
 
 只有外层 `dict A` 和外层 `dict B` 是两个不同对象。内部的 `config dict` 和 `ports list` 还是共享的。
@@ -555,9 +520,8 @@ res →    外层 dict B
 而 `res = copy.deepcopy(json1)` 才类似：
 
 ```text
-json1 → dict A → config A → ports A
-
-res   → dict B → config B → ports B
+json1 --> dict A --> config A --> ports A
+res   --> dict B --> config B --> ports B
 ```
 
 两个对象图真正分离。
@@ -569,7 +533,6 @@ res   → dict B → config B → ports B
 ### 4. 解题代码
 
 ```python
-import json
 import copy
 import ast
 
@@ -587,7 +550,7 @@ def merge_json(a, b):
             else:
                 # json1 有 json2 没有的 key，需要深拷贝
                 res[key] = copy.deepcopy(value)
-        
+
         # 剩下的是 json2 独有的 key
         for key, value in b.items():
             if key not in a:
@@ -595,7 +558,7 @@ def merge_json(a, b):
                 res[key] = copy.deepcopy(value)
 
         return res
-    
+
     # 2. list：拼接 + 去重
     if isinstance(a, list) and isinstance(b, list):
         res = []
@@ -610,7 +573,7 @@ def merge_json(a, b):
     # 3. bool 必须放在 int/float 前面，因为 bool 是 int 的子类
     if isinstance(a, bool) and isinstance(b, bool):
         return a or b
-    
+
     # 4. int/float，注意防止出现一个为 bool 一个为 int/float 的情况
     if (
         isinstance(a, (int, float))
@@ -619,7 +582,7 @@ def merge_json(a, b):
         and not isinstance(b, bool)
     ):
         return a + b
-    
+
     # 5. str
     if isinstance(a, str) and isinstance(b, str):
         return a + b
@@ -630,6 +593,8 @@ def merge_json(a, b):
     return copy.deepcopy(b)
 
 def solve():
+    # 本地测试入口：case1.txt 的两行分别为 "json1 = ..."、"json2 = ..."。
+    # 面试题本身只要求实现 merge_json，不规定文件输入格式。
     with open("case1.txt", "r", encoding="utf-8") as f:
         line1 = f.readline().strip()
         line2 = f.readline().strip()
@@ -639,7 +604,7 @@ def solve():
 
     ans = merge_json(json1, json2)
 
-    print(json.dumps(ans, ensure_ascii=False))
+    print(ans)
 
 
 if __name__ == "__main__":
@@ -651,14 +616,14 @@ if __name__ == "__main__":
 **输入：**
 
 ```text
-json1 = {"a": 1, "b": [1, 2, 3], "c": False, "d": 2.5} 
-json2 = {"a": 2, "b": [3, 4, 5], "c": True, "d": 3.5} 
+json1 = {"a": 1, "b": [1, 2, 3], "c": False, "d": 2.5}
+json2 = {"a": 2, "b": [3, 4, 5], "c": True, "d": 3.5}
 ```
 
 **输出：**
 
-```json
-{"a": 3, "b": [1, 2, 3, 4, 5], "c": true, "d": 6.0}
+```python
+{"a": 3, "b": [1, 2, 3, 4, 5], "c": True, "d": 6.0}
 ```
 
 #### 4.2 测试用例 2
@@ -666,14 +631,14 @@ json2 = {"a": 2, "b": [3, 4, 5], "c": True, "d": 3.5}
 **输入：**
 
 ```text
-json1 = {"x": {"y": {"z": [10, 20], "m": [1]}}} 
-json2 = {"x": {"y": {"z": [20, 30], "m": [2], "n": None}}} 
+json1 = {"x": {"y": {"z": [10, 20], "m": [1]}}}
+json2 = {"x": {"y": {"z": [20, 30], "m": [2], "n": None}}}
 ```
 
 **输出：**
 
-```json
-{"x": {"y": {"z": [10, 20, 30], "m": [1, 2], "n": null}}}
+```python
+{"x": {"y": {"z": [10, 20, 30], "m": [1, 2], "n": None}}}
 ```
 
 ### 5. 复杂度分析
