@@ -8,50 +8,51 @@
     <meta name="description" content="Kevin864 的个人网站，记录技术、研究、项目与思考" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body>
-    <header class="topbar shell" aria-label="主导航">
-      <a class="nav-link" href="#about">关于</a>
+  <body data-page="home">
+    <header class="topbar shell" aria-label="主导航" data-i18n-aria-label="mainNavigation">
+      <a class="nav-link" href="#about" data-i18n="about">关于</a>
       <a class="nav-link language-link" href="./en/">English</a>
-      <nav class="socials" aria-label="社交链接"></nav>
+      <nav class="socials" aria-label="社交链接" data-i18n-aria-label="socialLinks"></nav>
     </header>
 
     <main>
-      <section class="hero shell" aria-labelledby="name">
+      <section class="hero shell" id="about" aria-labelledby="name">
         <div class="hero-copy">
           <!-- <p class="eyebrow">PERSONAL ARCHIVE · 2026</p>  -->
           <h1 id="name">Kevin864</h1>
-          <p class="role">开发者 <span>/</span> 研究者 <span>/</span> 内容创作者</p>
+          <p class="role" data-i18n-html="role">开发者 <span>/</span> 研究者 <span>/</span> 内容创作者</p>
           <div class="hero-rule"></div>
-          <div class="project-slot" aria-label="精选项目预留区域">
-            <span>个人项目</span>
+          <div class="project-slot" aria-label="精选项目预留区域" data-i18n-aria-label="projectSlot">
+            <span data-i18n="personalProjects">个人项目</span>
             <span class="slot-note">Coming soon</span>
           </div>
         </div>
 
-        <div class="hero-art" aria-label="个人头像">
+        <div class="hero-art" aria-label="个人头像" data-i18n-aria-label="profileImage">
           <div class="art-glow"></div>
-          <img src="./pic/avatar.png" alt="轻音少女合照" />
+          <img src="./pic/avatar.png" alt="轻音少女合照" data-i18n-alt="avatarAlt" />
         </div>
       </section>
 
       <section class="archive-section shell" aria-labelledby="archive-title">
         <div class="archive-heading">
           <div class="section-heading">
-            <h2 id="archive-title">文章</h2>
+            <h2 id="archive-title" data-i18n="articles">文章</h2>
           </div>
           <label class="search-box">
-            <span class="sr-only">搜索文章</span>
-            <input id="article-search" type="search" placeholder="搜索文章" />
+            <span class="sr-only" data-i18n="searchArticles">搜索文章</span>
+            <input id="article-search" type="search" placeholder="搜索文章" data-i18n-placeholder="searchArticles" />
             <span aria-hidden="true">⌕</span>
           </label>
         </div>
-        <div class="tag-filter" id="tag-filter" aria-label="按标签筛选文章"></div>
+        <div class="tag-filter" id="tag-filter" aria-label="按标签筛选文章" data-i18n-aria-label="filterByTag"></div>
         <div class="article-list" id="article-list" aria-live="polite"></div>
       </section>
 
     </main>
 
     <script src="./social-links.js"></script>
+    <script src="./i18n.js"></script>
     <script src="./tag-config.js"></script>
     <script src="./script.js"></script>
   </body>

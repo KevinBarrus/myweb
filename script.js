@@ -4,14 +4,14 @@ const searchInput = document.querySelector("#article-search");
 let articles = [];
 
 function openTag(tag) {
-  window.location.href = `./tag.html?tag=${encodeURIComponent(tag)}`;
+  window.location.href = localizedUrl("./tag.html", { tag });
 }
 
 function createTagButton(tag, className) {
   const button = document.createElement("button");
   button.type = "button";
   button.className = className;
-  button.textContent = tag;
+  button.textContent = tagLabel(tag);
   button.addEventListener("click", () => openTag(tag));
   return button;
 }
@@ -19,7 +19,7 @@ function createTagButton(tag, className) {
 function renderFilters() {
   const label = document.createElement("span");
   label.className = "tag-label";
-  label.textContent = "标签";
+  label.textContent = t("tags");
   filterContainer.append(label);
   siteTags.forEach((tag) => filterContainer.append(createTagButton(tag, "tag-filter-button")));
 }
@@ -27,14 +27,19 @@ function renderFilters() {
 function renderArticles() {
   const query = searchInput.value.trim().toLowerCase();
   const visible = articles
-    .filter((article) => `${article.title} ${article.tags.join(" ")}`.toLowerCase().includes(query))
+    .filter((article) => siteLanguage === "zh" || article.translations?.en)
+    .filter((article) => {
+      const title = siteLanguage === "en" ? article.translations.en.title : article.title;
+      const labels = article.tags.map(tagLabel).join(" ");
+      return `${title} ${labels}`.toLowerCase().includes(query);
+    })
     .sort((a, b) => b.date.localeCompare(a.date));
 
   articleList.replaceChildren();
   if (!visible.length) {
     const empty = document.createElement("p");
     empty.className = "empty-state";
-    empty.textContent = query ? "没有找到匹配的文章。" : "文章将在这里慢慢生长。";
+    empty.textContent = query ? t("noMatches") : t("noArticles");
     articleList.append(empty);
     return;
   }
@@ -49,9 +54,10 @@ function renderArticles() {
     group.className = "year-group";
     group.innerHTML = `<p class="year-label">${year}</p>`;
     yearArticles.forEach((article) => {
+      const title = siteLanguage === "en" ? article.translations.en.title : article.title;
       const row = document.createElement("div");
       row.className = "article-row";
-      row.innerHTML = `<time class="article-date" datetime="${article.date}">${article.date.slice(5)}</time><a class="article-title" href="./article.html?slug=${encodeURIComponent(article.slug)}">${article.title}</a>`;
+      row.innerHTML = `<time class="article-date" datetime="${article.date}">${article.date.slice(5)}</time><a class="article-title" href="${localizedUrl("./article.html", { slug: article.slug })}">${title}</a>`;
       const articleTags = document.createElement("div");
       articleTags.className = "article-tags";
       article.tags.forEach((tag) => articleTags.append(createTagButton(tag, "article-tag")));

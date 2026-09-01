@@ -26,10 +26,10 @@ function parseFrontmatter(source) {
 
 function showError(error) {
   console.error("Article loading failed", error);
-  titleElement.textContent = "文章加载失败";
+  titleElement.textContent = t("articleLoadFailed");
   const message = window.location.protocol === "file:"
-    ? "请通过本地 HTTP 服务访问：python3 -m http.server 8000"
-    : `请确认文章索引和 Markdown 文件已部署（${error?.message || "未知错误"}）。`;
+    ? t("serveOverHttp")
+    : t("articleDeployError", { error: error?.message || t("unknownError") });
   contentElement.textContent = "";
   const errorElement = document.createElement("p");
   errorElement.className = "article-error";
@@ -110,15 +110,15 @@ function addCodeCopyButtons() {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "code-copy";
-    button.textContent = "复制";
+    button.textContent = t("copy");
     button.addEventListener("click", async () => {
       try {
         await navigator.clipboard.writeText(block.querySelector("code")?.textContent ?? "");
-        button.textContent = "已复制";
+        button.textContent = t("copied");
       } catch {
-        button.textContent = "复制失败";
+        button.textContent = t("copyFailed");
       }
-      window.setTimeout(() => { button.textContent = "复制"; }, 1200);
+      window.setTimeout(() => { button.textContent = t("copy"); }, 1200);
     });
     block.append(button);
   });
@@ -146,22 +146,35 @@ function renderMath() {
 
 function fetchResource(path) {
   return fetch(new URL(path, document.baseURI)).then((response) => {
-    if (!response.ok) throw new Error(`${path} 返回 HTTP ${response.status}`);
+    if (!response.ok) throw new Error(t("httpError", { path, status: response.status }));
     return response;
   });
 }
 
 if (!slug) {
-  showError(new Error("缺少文章 slug"));
+  showError(new Error(t("missingSlug")));
 } else {
   fetchResource("./articles/index.json").then((response) => response.json()).then((items) => {
     const item = items.find((article) => article.slug === slug);
-    if (!item) throw new Error(`找不到文章：${slug}`);
-    return fetchResource(`./${item.source}`).then((response) => response.text()).then((source) => ({ item, source }));
-  }).then(({ item, source }) => {
+    if (!item) throw new Error(t("articleNotFound", { slug }));
+    const translation = item.translations?.en;
+    if (siteLanguage === "zh" && !translation) {
+      const englishHome = new URL("./index.html", window.location.href);
+      englishHome.searchParams.set("lang", "en");
+      document.querySelector(".language-link").href = englishHome.href;
+    }
+    if (siteLanguage === "en" && !translation) {
+      window.location.replace(localizedUrl("./index.html"));
+      return null;
+    }
+    const sourcePath = siteLanguage === "en" ? translation.source : item.source;
+    return fetchResource(`./${sourcePath}`).then((response) => response.text()).then((source) => ({ item, source, translation }));
+  }).then((payload) => {
+    if (!payload) return;
+    const { item, source, translation } = payload;
     const parsed = parseFrontmatter(source);
     const tags = item.tags || [];
-    const title = parsed.data.title || item.title;
+    const title = siteLanguage === "en" ? translation.title : parsed.data.title || item.title;
     const createdAt = parsed.data.createdAt || item.createdAt || item.date;
     const updatedAt = (typeof parsed.data.updatedAt === "string" ? parsed.data.updatedAt : "") || item.updatedAt || "";
     titleElement.textContent = title;
@@ -172,13 +185,13 @@ if (!slug) {
       const tagElement = document.createElement("button");
       tagElement.type = "button";
       tagElement.className = "article-meta-tag";
-      tagElement.textContent = tag;
+      tagElement.textContent = tagLabel(tag);
       tagElement.addEventListener("click", () => {
-        window.location.href = `./tag.html?tag=${encodeURIComponent(tag)}`;
+        window.location.href = localizedUrl("./tag.html", { tag });
       });
       tagsElement.append(tagElement);
     });
-    if (!window.marked?.parse) throw new Error("Markdown 解析器加载失败");
+    if (!window.marked?.parse) throw new Error(t("markdownUnavailable"));
     contentElement.innerHTML = window.marked.parse(parsed.body, { gfm: true, breaks: false });
     removeDuplicateTitle(title);
     if (window.Prism) Prism.highlightAllUnder(contentElement);
@@ -186,7 +199,7 @@ if (!slug) {
     addHeadingIdsAndToc();
     addCodeCopyButtons();
     if (updatedAt && updatedAt !== createdAt) {
-      updatedElement.textContent = `最新更新时间：${updatedAt}`;
+      updatedElement.textContent = t("updatedAt", { date: updatedAt });
     } else {
       updatedElement.hidden = true;
     }

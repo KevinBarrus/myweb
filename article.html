@@ -8,22 +8,22 @@
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
   </head>
-  <body>
-    <header class="topbar shell" aria-label="主导航">
-      <a class="nav-link" href="./index.html">首页</a>
+  <body data-page="article">
+    <header class="topbar shell" aria-label="主导航" data-i18n-aria-label="mainNavigation">
+      <a class="nav-link" href="./index.html" data-i18n="home" data-localized-link>首页</a>
       <a class="nav-link language-link" href="./en/">English</a>
-      <nav class="socials" aria-label="社交链接"></nav>
+      <nav class="socials" aria-label="社交链接" data-i18n-aria-label="socialLinks"></nav>
     </header>
     <main class="article-page shell">
-      <a class="article-back" href="./index.html">← 返回</a>
+      <a class="article-back" href="./index.html" data-i18n="back" data-localized-link>← 返回</a>
       <div class="article-layout">
-        <aside class="article-toc" id="article-toc" aria-label="文章目录">
-          <p class="toc-title">目录</p>
+        <aside class="article-toc" id="article-toc" aria-label="文章目录" data-i18n-aria-label="articleToc">
+          <p class="toc-title" data-i18n="tableOfContents">目录</p>
           <nav id="toc-list"></nav>
         </aside>
         <article>
           <header class="article-header">
-            <h1 id="article-title">正在加载文章…</h1>
+            <h1 id="article-title" data-i18n="loadingArticle">正在加载文章…</h1>
             <time class="article-date article-published" id="article-published"></time>
           </header>
           <div class="article-content" id="article-content"></div>
@@ -35,6 +35,8 @@
       </div>
     </main>
     <script src="./social-links.js"></script>
+    <script src="./i18n.js"></script>
+    <script src="./tag-config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>

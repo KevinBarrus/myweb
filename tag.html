@@ -7,21 +7,22 @@
     <title>标签 — Kevin864</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body>
-    <header class="topbar shell" aria-label="主导航">
-      <a class="nav-link" href="./index.html">首页</a>
+  <body data-page="tag">
+    <header class="topbar shell" aria-label="主导航" data-i18n-aria-label="mainNavigation">
+      <a class="nav-link" href="./index.html" data-i18n="home" data-localized-link>首页</a>
       <a class="nav-link language-link" href="./en/">English</a>
-      <nav class="socials" aria-label="社交链接"></nav>
+      <nav class="socials" aria-label="社交链接" data-i18n-aria-label="socialLinks"></nav>
     </header>
     <main class="tag-page shell">
-      <a class="article-back" href="./index.html">← 返回</a>
+      <a class="article-back" href="./index.html" data-i18n="back" data-localized-link>← 返回</a>
       <header class="tag-page-header">
         <h1 id="tag-title">标签</h1>
       </header>
-      <div class="tag-filter tag-page-filter" id="tag-page-filter" aria-label="切换文章标签"></div>
+      <div class="tag-filter tag-page-filter" id="tag-page-filter" aria-label="切换文章标签" data-i18n-aria-label="switchTags"></div>
       <div class="article-list tag-article-list" id="tag-article-list" aria-live="polite"></div>
     </main>
     <script src="./social-links.js"></script>
+    <script src="./i18n.js"></script>
     <script src="./tag-config.js"></script>
     <script src="./tag-page.js"></script>
   </body>

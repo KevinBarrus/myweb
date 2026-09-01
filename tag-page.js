@@ -6,7 +6,7 @@ const activeTag = new URLSearchParams(window.location.search).get("tag");
 function renderTagFilters() {
   const label = document.createElement("span");
   label.className = "tag-label";
-  label.textContent = "标签";
+  label.textContent = t("tags");
   tagFilter.append(label);
 
   const tags = activeTag && !siteTags.includes(activeTag) ? [activeTag, ...siteTags] : siteTags;
@@ -14,10 +14,10 @@ function renderTagFilters() {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "tag-filter-button";
-    button.textContent = tag;
+    button.textContent = tagLabel(tag);
     if (tag !== activeTag) {
       button.addEventListener("click", () => {
-        window.location.href = `./tag.html?tag=${encodeURIComponent(tag)}`;
+        window.location.href = localizedUrl("./tag.html", { tag });
       });
       tagFilter.append(button);
       return;
@@ -32,19 +32,21 @@ function renderTagFilters() {
 function renderTagArticles(articles) {
   tagArticleList.replaceChildren();
   if (!activeTag) {
-    tagTitle.textContent = "未选择标签";
+    tagTitle.textContent = t("noTagSelected");
     return;
   }
 
-  tagTitle.textContent = activeTag;
-  document.title = `${activeTag} — Kevin864`;
+  const activeTagLabel = tagLabel(activeTag);
+  tagTitle.textContent = activeTagLabel;
+  document.title = `${activeTagLabel} — Kevin864`;
   const visible = articles
     .filter((article) => article.tags.includes(activeTag))
+    .filter((article) => siteLanguage === "zh" || article.translations?.en)
     .sort((a, b) => b.date.localeCompare(a.date));
   if (!visible.length) {
     const empty = document.createElement("p");
     empty.className = "empty-state";
-    empty.textContent = `“${activeTag}” 下暂时还没有文章。`;
+    empty.textContent = t("noTagArticles", { tag: activeTagLabel });
     tagArticleList.append(empty);
     return;
   }
@@ -59,10 +61,11 @@ function renderTagArticles(articles) {
     group.className = "year-group";
     group.innerHTML = `<p class="year-label">${year}</p>`;
     yearArticles.forEach((article) => {
+      const title = siteLanguage === "en" ? article.translations.en.title : article.title;
       const row = document.createElement("a");
       row.className = "article-row tag-article-row";
-      row.href = `./article.html?slug=${encodeURIComponent(article.slug)}`;
-      row.innerHTML = `<time class="article-date" datetime="${article.date}">${article.date.slice(5)}</time><span class="article-title">${article.title}</span>`;
+      row.href = localizedUrl("./article.html", { slug: article.slug });
+      row.innerHTML = `<time class="article-date" datetime="${article.date}">${article.date.slice(5)}</time><span class="article-title">${title}</span>`;
       group.append(row);
     });
     tagArticleList.append(group);
