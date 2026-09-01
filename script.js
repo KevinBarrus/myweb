@@ -1,40 +1,32 @@
-const tags = [
-  "Agent开发", "投资", "个人成长", "强化学习", "算法", "后端", "LLM", "项目讲解",
-  "健康", "总结与思考", "面试", "动漫", "机器学习", "深度学习", "数学", "英语",
-  "AI Infra", "开源贡献", "Linux", "MySQL", "Redis", "计算机网络", "操作系统", "git",
-  "AI工具", "后训练", "游戏", "钢琴演奏", "斯诺克比赛解说", "斯诺克游戏集锦",
-];
-
-let articles = [];
 const filterContainer = document.querySelector("#tag-filter");
 const articleList = document.querySelector("#article-list");
 const searchInput = document.querySelector("#article-search");
-let activeTag = "全部";
+let articles = [];
 
-function createFilterButton(label, value = label) {
+function openTag(tag) {
+  window.location.href = `./tag.html?tag=${encodeURIComponent(tag)}`;
+}
+
+function createTagButton(tag, className) {
   const button = document.createElement("button");
   button.type = "button";
-  if (value === "全部") button.className = "tag-label";
-  button.textContent = label;
-  button.setAttribute("aria-pressed", value === activeTag);
-  button.addEventListener("click", () => {
-    activeTag = value;
-    renderFilters();
-    renderArticles();
-  });
+  button.className = className;
+  button.textContent = tag;
+  button.addEventListener("click", () => openTag(tag));
   return button;
 }
 
 function renderFilters() {
-  filterContainer.replaceChildren();
-  filterContainer.append(createFilterButton("标签", "全部"));
-  [...tags].forEach((tag) => filterContainer.append(createFilterButton(tag)));
+  const label = document.createElement("span");
+  label.className = "tag-label";
+  label.textContent = "标签";
+  filterContainer.append(label);
+  siteTags.forEach((tag) => filterContainer.append(createTagButton(tag, "tag-filter-button")));
 }
 
 function renderArticles() {
   const query = searchInput.value.trim().toLowerCase();
   const visible = articles
-    .filter((article) => activeTag === "全部" || article.tags.includes(activeTag))
     .filter((article) => `${article.title} ${article.tags.join(" ")}`.toLowerCase().includes(query))
     .sort((a, b) => b.date.localeCompare(a.date));
 
@@ -42,21 +34,28 @@ function renderArticles() {
   if (!visible.length) {
     const empty = document.createElement("p");
     empty.className = "empty-state";
-    empty.textContent = query || activeTag !== "全部" ? "没有找到匹配的文章。" : "文章将在这里慢慢生长。";
+    empty.textContent = query ? "没有找到匹配的文章。" : "文章将在这里慢慢生长。";
     articleList.append(empty);
     return;
   }
 
-  const groups = Map.groupBy(visible, (article) => article.date.slice(0, 4));
-  groups.forEach((yearArticles, year) => {
+  const groups = visible.reduce((result, article) => {
+    const year = article.date.slice(0, 4);
+    (result[year] ||= []).push(article);
+    return result;
+  }, {});
+  Object.entries(groups).forEach(([year, yearArticles]) => {
     const group = document.createElement("section");
     group.className = "year-group";
     group.innerHTML = `<p class="year-label">${year}</p>`;
     yearArticles.forEach((article) => {
-      const row = document.createElement("a");
+      const row = document.createElement("div");
       row.className = "article-row";
-      row.href = `./article.html?slug=${encodeURIComponent(article.slug)}`;
-      row.innerHTML = `<time class="article-date" datetime="${article.date}">${article.date.slice(5)}</time><span class="article-title">${article.title}</span><span class="article-tags">${article.tags.map((tag) => `<span class="article-tag">${tag}</span>`).join("")}</span>`;
+      row.innerHTML = `<time class="article-date" datetime="${article.date}">${article.date.slice(5)}</time><a class="article-title" href="./article.html?slug=${encodeURIComponent(article.slug)}">${article.title}</a>`;
+      const articleTags = document.createElement("div");
+      articleTags.className = "article-tags";
+      article.tags.forEach((tag) => articleTags.append(createTagButton(tag, "article-tag")));
+      row.append(articleTags);
       group.append(row);
     });
     articleList.append(group);
@@ -74,4 +73,4 @@ fetch("./articles/index.json")
     articles = items;
     renderArticles();
   })
-  .catch(() => renderArticles());
+  .catch(renderArticles);

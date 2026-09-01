@@ -169,9 +169,13 @@ if (!slug) {
     publishedElement.dateTime = createdAt;
     publishedElement.textContent = createdAt;
     tags.forEach((tag) => {
-      const tagElement = document.createElement("span");
+      const tagElement = document.createElement("button");
+      tagElement.type = "button";
       tagElement.className = "article-meta-tag";
       tagElement.textContent = tag;
+      tagElement.addEventListener("click", () => {
+        window.location.href = `./tag.html?tag=${encodeURIComponent(tag)}`;
+      });
       tagsElement.append(tagElement);
     });
     if (!window.marked?.parse) throw new Error("Markdown 解析器加载失败");
