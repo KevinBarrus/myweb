@@ -145,7 +145,7 @@ function renderMath() {
 }
 
 function fetchResource(path) {
-  return fetch(new URL(path, document.baseURI)).then((response) => {
+  return fetch(new URL(path, document.baseURI), { cache: "no-store" }).then((response) => {
     if (!response.ok) throw new Error(t("httpError", { path, status: response.status }));
     return response;
   });
@@ -154,16 +154,16 @@ function fetchResource(path) {
 if (!slug) {
   showError(new Error(t("missingSlug")));
 } else {
-  fetchResource("./articles/index.json").then((response) => response.json()).then((items) => {
+  fetchResource(`./articles/index.json?lang=${siteLanguage}`).then((response) => response.json()).then((items) => {
     const item = items.find((article) => article.slug === slug);
     if (!item) throw new Error(t("articleNotFound", { slug }));
     const translation = item.translations?.en;
-    if (siteLanguage === "zh" && !translation) {
+    if (siteLanguage === "zh" && !translation?.source) {
       const englishHome = new URL("./index.html", window.location.href);
       englishHome.searchParams.set("lang", "en");
       document.querySelector(".language-link").href = englishHome.href;
     }
-    if (siteLanguage === "en" && !translation) {
+    if (siteLanguage === "en" && !translation?.source) {
       window.location.replace(localizedUrl("./index.html"));
       return null;
     }

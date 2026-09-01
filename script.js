@@ -27,7 +27,7 @@ function renderFilters() {
 function renderArticles() {
   const query = searchInput.value.trim().toLowerCase();
   const visible = articles
-    .filter((article) => siteLanguage === "zh" || article.translations?.en)
+    .filter((article) => siteLanguage === "zh" || article.translations?.en?.source)
     .filter((article) => {
       const title = siteLanguage === "en" ? article.translations.en.title : article.title;
       const labels = article.tags.map(tagLabel).join(" ");
@@ -70,7 +70,7 @@ function renderArticles() {
 
 searchInput.addEventListener("input", renderArticles);
 renderFilters();
-fetch("./articles/index.json")
+fetch(`./articles/index.json?lang=${siteLanguage}`, { cache: "no-store" })
   .then((response) => {
     if (!response.ok) throw new Error(`Article index failed: ${response.status}`);
     return response.json();

@@ -41,7 +41,7 @@ function renderTagArticles(articles) {
   document.title = `${activeTagLabel} — Kevin864`;
   const visible = articles
     .filter((article) => article.tags.includes(activeTag))
-    .filter((article) => siteLanguage === "zh" || article.translations?.en)
+    .filter((article) => siteLanguage === "zh" || article.translations?.en?.source)
     .sort((a, b) => b.date.localeCompare(a.date));
   if (!visible.length) {
     const empty = document.createElement("p");
@@ -73,7 +73,7 @@ function renderTagArticles(articles) {
 }
 
 renderTagFilters();
-fetch("./articles/index.json")
+fetch(`./articles/index.json?lang=${siteLanguage}`, { cache: "no-store" })
   .then((response) => {
     if (!response.ok) throw new Error(`Article index failed: ${response.status}`);
     return response.json();
