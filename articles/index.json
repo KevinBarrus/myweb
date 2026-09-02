@@ -6,12 +6,532 @@
     "date": "2026-08-27",
     "createdAt": "2026-08-27 20:30",
     "updatedAt": "",
-    "tags": ["面试", "算法"],
+    "tags": [
+      "面试",
+      "算法"
+    ],
     "translations": {
       "en": {
         "title": "ByteDance Agent Development Interview — A Hands-on Analysis",
         "source": "articles/en/2026.8.27-byte-agent-interview.md"
       }
     }
+  },
+  {
+    "slug": "105从前序与中序遍历序列构造二叉树",
+    "source": "articles/105从前序与中序遍历序列构造二叉树.md",
+    "title": "105从前序与中序遍历序列构造二叉树",
+    "date": "2026-07-26",
+    "createdAt": "2026-07-26 23:18",
+    "updatedAt": "2026-07-27 00:10",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "1143最长公共子序列",
+    "source": "articles/1143最长公共子序列.md",
+    "title": "1143最长公共子序列",
+    "date": "2026-07-14",
+    "createdAt": "2026-07-14 21:59",
+    "updatedAt": "2026-07-14 23:10",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "131分割回文串",
+    "source": "articles/131分割回文串.md",
+    "title": "131分割回文串",
+    "date": "2026-07-29",
+    "createdAt": "2026-07-29 22:45",
+    "updatedAt": "2026-07-30 01:32",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "146LRU缓存",
+    "source": "articles/146LRU缓存.md",
+    "title": "146LRU缓存",
+    "date": "2026-05-08",
+    "createdAt": "2026-05-08 23:42",
+    "updatedAt": "2025-11-04 11:05",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "148排序链表",
+    "source": "articles/148排序链表.md",
+    "title": "148排序链表",
+    "date": "2026-07-19",
+    "createdAt": "2026-07-19 21:47",
+    "updatedAt": "2026-07-20 00:19",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "152最大乘积子数组",
+    "source": "articles/152最大乘积子数组.md",
+    "title": "152最大乘积子数组",
+    "date": "2026-07-11",
+    "createdAt": "2026-07-11 00:52",
+    "updatedAt": "2026-07-11 01:13",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "153寻找旋转排序数组中的最小值",
+    "source": "articles/153寻找旋转排序数组中的最小值.md",
+    "title": "153寻找旋转排序数组中的最小值",
+    "date": "2026-08-04",
+    "createdAt": "2026-08-04 23:28",
+    "updatedAt": "2026-08-04 23:38",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "160相交链表",
+    "source": "articles/160相交链表.md",
+    "title": "160相交链表",
+    "date": "2026-05-08",
+    "createdAt": "2026-05-08 23:42",
+    "updatedAt": "2025-11-26 11:35",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "1两数之和",
+    "source": "articles/1两数之和.md",
+    "title": "1两数之和",
+    "date": "2026-05-08",
+    "createdAt": "2026-05-08 23:42",
+    "updatedAt": "2025-11-25 09:04",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "208实现前缀树",
+    "source": "articles/208实现前缀树.md",
+    "title": "208实现前缀树",
+    "date": "2026-07-20",
+    "createdAt": "2026-07-20 23:22",
+    "updatedAt": "2026-07-21 00:37",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "215数组中第K个最大元素",
+    "source": "articles/215数组中第K个最大元素.md",
+    "title": "215数组中第K个最大元素",
+    "date": "2026-07-22",
+    "createdAt": "2026-07-22 16:19",
+    "updatedAt": "2026-07-23 23:44",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "22括号生成",
+    "source": "articles/22括号生成.md",
+    "title": "22括号生成",
+    "date": "2026-07-28",
+    "createdAt": "2026-07-28 23:46",
+    "updatedAt": "2026-07-29 11:43",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "2333最小差值平方和",
+    "source": "articles/2333最小差值平方和.md",
+    "title": "2333最小差值平方和",
+    "date": "2026-05-08",
+    "createdAt": "2026-05-08 23:42",
+    "updatedAt": "2026-07-15 20:18",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "2390移除星号（栈）",
+    "source": "articles/2390移除星号（栈）.md",
+    "title": "2390移除星号（栈）",
+    "date": "2026-05-08",
+    "createdAt": "2026-05-08 23:42",
+    "updatedAt": "2025-10-18 23:42",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "239滑动窗口最大值",
+    "source": "articles/239滑动窗口最大值.md",
+    "title": "239滑动窗口最大值",
+    "date": "2026-07-30",
+    "createdAt": "2026-07-30 20:30",
+    "updatedAt": "2026-07-30 23:55",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "283移动零",
+    "source": "articles/283移动零.md",
+    "title": "283移动零",
+    "date": "2026-05-08",
+    "createdAt": "2026-05-08 23:42",
+    "updatedAt": "2026-01-22 20:46",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "287寻找重复数",
+    "source": "articles/287寻找重复数.md",
+    "title": "287寻找重复数",
+    "date": "2026-07-17",
+    "createdAt": "2026-07-17 22:03",
+    "updatedAt": "2026-07-18 00:10",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "300最长递增子序列",
+    "source": "articles/300最长递增子序列.md",
+    "title": "300最长递增子序列",
+    "date": "2026-05-08",
+    "createdAt": "2026-05-08 23:42",
+    "updatedAt": "2026-07-13 01:35",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "31下一个排列",
+    "source": "articles/31下一个排列.md",
+    "title": "31下一个排列",
+    "date": "2026-07-16",
+    "createdAt": "2026-07-16 22:55",
+    "updatedAt": "2026-07-17 00:13",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "322零钱兑换",
+    "source": "articles/322零钱兑换.md",
+    "title": "322零钱兑换",
+    "date": "2026-05-08",
+    "createdAt": "2026-05-08 23:42",
+    "updatedAt": "2026-07-09 23:34",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "3379转换数组",
+    "source": "articles/3379转换数组.md",
+    "title": "3379转换数组",
+    "date": "2026-05-08",
+    "createdAt": "2026-05-08 23:42",
+    "updatedAt": "2026-02-07 23:35",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "33搜索旋转排序数组",
+    "source": "articles/33搜索旋转排序数组.md",
+    "title": "33搜索旋转排序数组",
+    "date": "2026-08-03",
+    "createdAt": "2026-08-03 12:10",
+    "updatedAt": "2026-08-04 13:08",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "347前K个高频元素",
+    "source": "articles/347前K个高频元素.md",
+    "title": "347前K个高频元素",
+    "date": "2026-07-24",
+    "createdAt": "2026-07-24 23:32",
+    "updatedAt": "2026-07-26 00:51",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "394字符串解码",
+    "source": "articles/394字符串解码.md",
+    "title": "394字符串解码",
+    "date": "2026-07-21",
+    "createdAt": "2026-07-21 16:41",
+    "updatedAt": "2026-07-21 22:53",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "39组合总和",
+    "source": "articles/39组合总和.md",
+    "title": "39组合总和",
+    "date": "2026-07-27",
+    "createdAt": "2026-07-27 23:36",
+    "updatedAt": "2026-07-28 01:25",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "416分割等和子集",
+    "source": "articles/416分割等和子集.md",
+    "title": "416分割等和子集",
+    "date": "2026-07-13",
+    "createdAt": "2026-07-13 21:41",
+    "updatedAt": "2026-07-13 23:08",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "437路径总和III",
+    "source": "articles/437路径总和III.md",
+    "title": "437路径总和III",
+    "date": "2026-05-08",
+    "createdAt": "2026-05-08 23:42",
+    "updatedAt": "2026-07-07 00:39",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "48旋转图像",
+    "source": "articles/48旋转图像.md",
+    "title": "48旋转图像",
+    "date": "2026-07-15",
+    "createdAt": "2026-07-15 22:24",
+    "updatedAt": "2026-07-15 23:47",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "54螺旋矩阵",
+    "source": "articles/54螺旋矩阵.md",
+    "title": "54螺旋矩阵",
+    "date": "2026-07-15",
+    "createdAt": "2026-07-15 12:25",
+    "updatedAt": "2026-07-15 20:14",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "654最大二叉树（递归、线段树）",
+    "source": "articles/654最大二叉树（递归、线段树）.md",
+    "title": "654最大二叉树（递归、线段树）",
+    "date": "2026-05-08",
+    "createdAt": "2026-05-08 23:42",
+    "updatedAt": "2026-07-07 22:21",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "684冗余连接（并查集）",
+    "source": "articles/684冗余连接（并查集）.md",
+    "title": "684冗余连接（并查集）",
+    "date": "2026-05-08",
+    "createdAt": "2026-05-08 23:42",
+    "updatedAt": "2025-09-27 22:49",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "72编辑距离",
+    "source": "articles/72编辑距离.md",
+    "title": "72编辑距离",
+    "date": "2026-07-18",
+    "createdAt": "2026-07-18 23:19",
+    "updatedAt": "2026-07-19 01:01",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "73矩阵置零",
+    "source": "articles/73矩阵置零.md",
+    "title": "73矩阵置零",
+    "date": "2026-07-06",
+    "createdAt": "2026-07-06 00:09",
+    "updatedAt": "2026-07-06 00:59",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "73K个一组翻转链表",
+    "source": "articles/73K个一组翻转链表.md",
+    "title": "73K个一组翻转链表",
+    "date": "2026-07-08",
+    "createdAt": "2026-07-08 13:44",
+    "updatedAt": "2026-07-09 01:07",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "75颜色分类",
+    "source": "articles/75颜色分类.md",
+    "title": "75颜色分类",
+    "date": "2026-07-07",
+    "createdAt": "2026-07-07 22:21",
+    "updatedAt": "2026-07-08 00:35",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "763划分字母区间",
+    "source": "articles/763划分字母区间.md",
+    "title": "763划分字母区间",
+    "date": "2026-07-22",
+    "createdAt": "2026-07-22 16:30",
+    "updatedAt": "2026-07-22 21:03",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "76最小覆盖子串",
+    "source": "articles/76最小覆盖子串.md",
+    "title": "76最小覆盖子串",
+    "date": "2026-08-01",
+    "createdAt": "2026-08-01 20:59",
+    "updatedAt": "2026-08-02 12:46",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "79单词搜索",
+    "source": "articles/79单词搜索.md",
+    "title": "79单词搜索",
+    "date": "2026-07-31",
+    "createdAt": "2026-07-31 21:11",
+    "updatedAt": "2026-08-01 00:12",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "背包问题",
+    "source": "articles/背包问题.md",
+    "title": "背包问题",
+    "date": "2026-05-08",
+    "createdAt": "2026-05-08 23:42",
+    "updatedAt": "2026-07-13 22:09",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "反转链表及其应用（力扣2130）",
+    "source": "articles/反转链表及其应用（力扣2130）.md",
+    "title": "反转链表及其应用（力扣2130）",
+    "date": "2026-05-08",
+    "createdAt": "2026-05-08 23:42",
+    "updatedAt": "2025-10-13 21:00",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "db178分数排名",
+    "source": "articles/db178分数排名.md",
+    "title": "db178分数排名",
+    "date": "2026-05-08",
+    "createdAt": "2026-05-08 23:42",
+    "updatedAt": "2025-10-18 23:02",
+    "tags": [
+      "算法"
+    ]
+  },
+  {
+    "slug": "Android 远程控制 WSL2：用手机随时接管 Agent",
+    "source": "articles/Android 远程控制 WSL2：用手机随时接管 Agent.md",
+    "title": "Android 远程控制 WSL2：用手机随时接管 Agent",
+    "date": "2026-08-30",
+    "createdAt": "2026-08-30 10:36",
+    "updatedAt": "2026-08-30 14:06",
+    "tags": [
+      "Linux"
+    ]
+  },
+  {
+    "slug": "InnoDB 内存 + 磁盘整体架构",
+    "source": "articles/InnoDB内存+磁盘整体架构.md",
+    "title": "InnoDB 内存 + 磁盘整体架构",
+    "date": "2026-05-08",
+    "createdAt": "2026-05-08 23:42",
+    "updatedAt": "2026-05-12 19:43",
+    "tags": [
+      "MySQL"
+    ]
+  },
+  {
+    "slug": "MySQL 分层架构",
+    "source": "articles/MySQL分层架构.md",
+    "title": "MySQL 分层架构",
+    "date": "2026-05-08",
+    "createdAt": "2026-05-08 23:42",
+    "updatedAt": "2026-05-13 15:26",
+    "tags": [
+      "MySQL"
+    ]
+  },
+  {
+    "slug": "Ubuntu 虚拟机配置",
+    "source": "articles/Ubuntu虚拟机配置.md",
+    "title": "Ubuntu 虚拟机配置",
+    "date": "2025-09-11",
+    "createdAt": "2025-09-11 23:13",
+    "updatedAt": "2026-05-02 19:43",
+    "tags": [
+      "Linux"
+    ]
+  },
+  {
+    "slug": "WSL2 安装",
+    "source": "articles/WSL2安装.md",
+    "title": "WSL2 安装",
+    "date": "2026-05-09",
+    "createdAt": "2026-05-09 16:05",
+    "updatedAt": "2026-05-12 13:47",
+    "tags": [
+      "Linux"
+    ]
+  },
+  {
+    "slug": "事务、ACID、并发与隔离",
+    "source": "articles/事务、ACID、并发与隔离.md",
+    "title": "事务、ACID、并发与隔离",
+    "date": "2026-06-02",
+    "createdAt": "2026-06-02 21:20",
+    "updatedAt": "2026-06-02 22:08",
+    "tags": [
+      "MySQL"
+    ]
   }
 ]

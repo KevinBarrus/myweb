@@ -131,6 +131,16 @@ function removeDuplicateTitle(title) {
   if (normalized === title.trim()) firstHeading.remove();
 }
 
+function resolveArticleImagePaths(sourcePath) {
+  const sourceDirectory = sourcePath.slice(0, sourcePath.lastIndexOf("/") + 1);
+  contentElement.querySelectorAll("img[src]").forEach((image) => {
+    const src = image.getAttribute("src");
+    if (!src || /^(?:[a-z][a-z\d+.-]*:|\/\/|\/|#)/i.test(src)) return;
+    const resolved = new URL(src, `https://article.local/${sourceDirectory}`);
+    image.setAttribute("src", `.${resolved.pathname}${resolved.search}${resolved.hash}`);
+  });
+}
+
 function renderMath() {
   if (typeof renderMathInElement !== "function") return;
   renderMathInElement(contentElement, {
@@ -193,6 +203,7 @@ if (!slug) {
     });
     if (!window.marked?.parse) throw new Error(t("markdownUnavailable"));
     contentElement.innerHTML = window.marked.parse(parsed.body, { gfm: true, breaks: false });
+    resolveArticleImagePaths(sourcePath);
     removeDuplicateTitle(title);
     if (window.Prism) Prism.highlightAllUnder(contentElement);
     renderMath();
