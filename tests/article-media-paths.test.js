@@ -54,7 +54,7 @@ const context = vm.createContext({
   fetch: () => {
     requests += 1;
     if (requests === 1) return Promise.resolve({ ok: true, json: () => Promise.resolve([{ slug: "demo", source: "articles/WSL2安装.md", title: "Demo", date: "2026-01-01", createdAt: "2026-01-01 00:00", tags: [] }]) });
-    return Promise.resolve({ ok: true, text: () => Promise.resolve("---\ntitle: Demo\ncreatedAt: 2026-01-01 00:00\nupdatedAt: 2026-01-01 00:00\n---\nBody") });
+    return Promise.resolve({ ok: true, text: () => Promise.resolve('---\ntitle: "Demo"\ncreatedAt: 2026-01-01 00:00\nupdatedAt: 2026-01-01 00:00\n---\nBody') });
   },
 });
 

@@ -17,7 +17,9 @@ function parseFrontmatter(source) {
     if (listItem && currentList) currentList.push(listItem[1].trim());
     const field = line.match(/^([\w-]+):\s*(.*)$/);
     if (!field) return;
-    const value = field[2].trim();
+    const rawValue = field[2].trim();
+    const isQuoted = rawValue.length >= 2 && ((rawValue.startsWith('"') && rawValue.endsWith('"')) || (rawValue.startsWith("'") && rawValue.endsWith("'")));
+    const value = isQuoted ? rawValue.slice(1, -1) : rawValue;
     currentList = value ? null : [];
     data[field[1]] = value || currentList;
   });
