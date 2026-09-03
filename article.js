@@ -5,7 +5,6 @@ const updatedElement = document.querySelector("#article-updated");
 const contentElement = document.querySelector("#article-content");
 const tocElement = document.querySelector("#toc-list");
 const tocContainer = document.querySelector("#article-toc");
-const articleLayout = document.querySelector(".article-layout");
 const slug = new URLSearchParams(window.location.search).get("slug");
 
 function parseFrontmatter(source) {
@@ -42,7 +41,6 @@ function addHeadingIdsAndToc() {
   tocElement.replaceChildren();
   const headings = contentElement.querySelectorAll("h2, h3, h4");
   tocContainer.hidden = !headings.length;
-  articleLayout.classList?.toggle("no-toc", !headings.length);
   if (!headings.length) {
     return;
   }

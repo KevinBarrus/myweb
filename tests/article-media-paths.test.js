@@ -8,18 +8,7 @@ const images = [
   { src: "https://example.com/image.png" },
 ];
 function element() {
-  const classes = new Set();
-  return {
-    append() {},
-    replaceChildren() {},
-    querySelector: () => null,
-    querySelectorAll: () => [],
-    addEventListener() {},
-    classList: {
-      toggle(name, enabled) { enabled ? classes.add(name) : classes.delete(name); },
-      contains: (name) => classes.has(name),
-    },
-  };
+  return { append() {}, replaceChildren() {}, querySelector: () => null, querySelectorAll: () => [], addEventListener() {} };
 }
 const content = {
   append() {},
@@ -41,7 +30,6 @@ const elements = {
   "#toc-list": element(),
   "#article-toc": element(),
   ".article-toc": element(),
-  ".article-layout": element(),
   ".language-link": element(),
 };
 let requests = 0;
@@ -75,7 +63,6 @@ const context = vm.createContext({
   await new Promise((resolve) => setImmediate(resolve));
   assert.strictEqual(requests, 2);
   assert.strictEqual(elements["#article-title"].textContent, "Demo");
-  assert(elements[".article-layout"].classList.contains("no-toc"));
   assert.strictEqual(images[0].src, "./articles/assets/WSL2%E5%AE%89%E8%A3%85/winRoptionalfeatures.png");
   assert.strictEqual(images[1].src, "./assets/example.png?size=2#preview");
   assert.strictEqual(images[2].src, "https://example.com/image.png");
