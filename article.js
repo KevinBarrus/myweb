@@ -178,10 +178,10 @@ if (!slug) {
       return null;
     }
     const sourcePath = siteLanguage === "en" ? translation.source : item.source;
-    return fetchResource(`./${sourcePath}`).then((response) => response.text()).then((source) => ({ item, source, translation }));
+    return fetchResource(`./${sourcePath}`).then((response) => response.text()).then((source) => ({ item, source, sourcePath, translation }));
   }).then((payload) => {
     if (!payload) return;
-    const { item, source, translation } = payload;
+    const { item, source, sourcePath, translation } = payload;
     const parsed = parseFrontmatter(source);
     const tags = item.tags || [];
     const title = siteLanguage === "en" ? translation.title : parsed.data.title || item.title;
