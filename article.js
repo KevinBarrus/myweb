@@ -6,6 +6,28 @@ const contentElement = document.querySelector("#article-content");
 const tocElement = document.querySelector("#toc-list");
 const tocContainer = document.querySelector("#article-toc");
 const slug = new URLSearchParams(window.location.search).get("slug");
+const languageAliases = {
+  "c++": "cpp",
+  "c#": "csharp",
+  "f#": "fsharp",
+  js: "javascript",
+  ts: "typescript",
+  py: "python",
+  rb: "ruby",
+  rs: "rust",
+  golang: "go",
+  mysql: "sql",
+  postgresql: "sql",
+  shell: "bash",
+  sh: "bash",
+  zsh: "bash",
+  ps1: "powershell",
+  html: "markup",
+  xml: "markup",
+  yml: "yaml",
+  txt: "text",
+  plaintext: "text",
+};
 
 function parseFrontmatter(source) {
   const match = source.match(/^---\s*\n([\s\S]*?)\n---\s*\n?/);
@@ -155,6 +177,15 @@ function renderMath() {
   });
 }
 
+function normalizeCodeLanguages() {
+  contentElement.querySelectorAll('code[class*="language-"]').forEach((code) => {
+    const match = code.className.match(/\blanguage-([^\s]+)/);
+    if (!match) return;
+    const language = match[1].toLowerCase();
+    code.className = code.className.replace(match[0], `language-${languageAliases[language] || language}`);
+  });
+}
+
 function fetchResource(path) {
   return fetch(new URL(path, document.baseURI), { cache: "no-store" }).then((response) => {
     if (!response.ok) throw new Error(t("httpError", { path, status: response.status }));
@@ -206,6 +237,7 @@ if (!slug) {
     contentElement.innerHTML = window.marked.parse(parsed.body, { gfm: true, breaks: false });
     resolveArticleImagePaths(sourcePath);
     removeDuplicateTitle(title);
+    normalizeCodeLanguages();
     if (window.Prism) Prism.highlightAllUnder(contentElement);
     renderMath();
     addHeadingIdsAndToc();

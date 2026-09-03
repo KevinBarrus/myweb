@@ -7,6 +7,7 @@ const images = [
   { src: "../assets/example.png?size=2#preview" },
   { src: "https://example.com/image.png" },
 ];
+const codeElement = { className: "language-C++" };
 function element() {
   return { append() {}, replaceChildren() {}, querySelector: () => null, querySelectorAll: () => [], addEventListener() {} };
 }
@@ -14,11 +15,14 @@ const content = {
   append() {},
   querySelector: () => null,
   querySelectorAll(selector) {
-    if (selector !== "img[src]") return [];
-    return images.map((image) => ({
-      getAttribute: () => image.src,
-      setAttribute: (_, value) => { image.src = value; },
-    }));
+    if (selector === 'code[class*="language-"]') return [codeElement];
+    if (selector === "img[src]") {
+      return images.map((image) => ({
+        getAttribute: () => image.src,
+        setAttribute: (_, value) => { image.src = value; },
+      }));
+    }
+    return [];
   },
 };
 const elements = {
@@ -66,6 +70,7 @@ const context = vm.createContext({
   assert.strictEqual(images[0].src, "./articles/assets/WSL2%E5%AE%89%E8%A3%85/winRoptionalfeatures.png");
   assert.strictEqual(images[1].src, "./assets/example.png?size=2#preview");
   assert.strictEqual(images[2].src, "https://example.com/image.png");
+  assert.strictEqual(codeElement.className, "language-cpp");
   console.log("article media path checks passed");
 })().catch((error) => {
   console.error(error);
