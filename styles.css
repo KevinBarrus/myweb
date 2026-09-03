@@ -55,8 +55,12 @@ h2 { margin-bottom: 0; font-size: clamp(27px, 3vw, 38px); letter-spacing: -.045e
 .tag-filter .tag-label { display: inline-flex; align-items: center; padding: 5px 10px; border: 1px solid rgba(76, 101, 77, .28); border-radius: 7px; color: var(--green-dark); background: #edf1e9; font-weight: 700; }
 .tag-page-filter { padding-top: 28px; }
 .tag-filter .tag-selected-label { padding: 5px 10px; border: 1px solid rgba(76, 101, 77, .28); border-radius: 999px; color: var(--green-dark); background: #edf1e9; cursor: default; font-weight: 700; }
+.year-nav { display: flex; align-items: center; gap: 9px; padding-top: 18px; color: #a0a59b; font-size: 12px; font-variant-numeric: tabular-nums; }
+.year-nav button { padding: 0; border: 0; color: #777e75; background: transparent; cursor: pointer; transition: color .2s ease; }
+.year-nav button:hover, .year-nav button:focus-visible { color: var(--green-dark); }
+.year-nav[hidden] { display: none; }
 .article-list { min-height: 160px; }
-.year-group { padding-top: 34px; }
+.year-group { padding-top: 34px; scroll-margin-top: 24px; }
 .year-label { margin-bottom: 8px; color: #969b91; font-size: 12px; font-variant-numeric: tabular-nums; }
 .article-row { display: grid; grid-template-columns: 104px 1fr auto; align-items: center; gap: 22px; padding: 18px 0; border-bottom: 1px solid rgba(36, 37, 33, .08); transition: padding .2s ease, color .2s ease; }
 .article-row:hover { padding-left: 8px; color: var(--green-dark); }

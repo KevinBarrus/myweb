@@ -1,4 +1,5 @@
 const filterContainer = document.querySelector("#tag-filter");
+const yearNav = document.querySelector("#year-nav");
 const articleList = document.querySelector("#article-list");
 const searchInput = document.querySelector("#article-search");
 let articles = [];
@@ -24,6 +25,26 @@ function renderFilters() {
   siteTags.forEach((tag) => filterContainer.append(createTagButton(tag, "tag-filter-button")));
 }
 
+function renderYearNavigation(years) {
+  yearNav.replaceChildren();
+  years.forEach((year, index) => {
+    if (index) {
+      const separator = document.createElement("span");
+      separator.textContent = "·";
+      separator.setAttribute("aria-hidden", "true");
+      yearNav.append(separator);
+    }
+    const link = document.createElement("button");
+    link.type = "button";
+    link.textContent = year;
+    link.addEventListener("click", () => {
+      document.querySelector(`#year-${year}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    yearNav.append(link);
+  });
+  yearNav.hidden = !years.length;
+}
+
 function renderArticles() {
   const query = searchInput.value.trim().toLowerCase();
   const visible = articles
@@ -33,10 +54,11 @@ function renderArticles() {
       const labels = article.tags.map(tagLabel).join(" ");
       return `${title} ${labels}`.toLowerCase().includes(query);
     })
-    .sort((a, b) => b.date.localeCompare(a.date));
+    .sort((a, b) => (b.createdAt || b.date).localeCompare(a.createdAt || a.date));
 
   articleList.replaceChildren();
   if (!visible.length) {
+    renderYearNavigation([]);
     const empty = document.createElement("p");
     empty.className = "empty-state";
     empty.textContent = query ? t("noMatches") : t("noArticles");
@@ -49,9 +71,13 @@ function renderArticles() {
     (result[year] ||= []).push(article);
     return result;
   }, {});
-  Object.entries(groups).forEach(([year, yearArticles]) => {
+  const years = Object.keys(groups).sort((a, b) => b.localeCompare(a));
+  renderYearNavigation(years);
+  years.forEach((year) => {
+    const yearArticles = groups[year];
     const group = document.createElement("section");
     group.className = "year-group";
+    group.id = `year-${year}`;
     group.innerHTML = `<p class="year-label">${year}</p>`;
     yearArticles.forEach((article) => {
       const title = siteLanguage === "en" ? article.translations.en.title : article.title;
