@@ -102,7 +102,7 @@ h2 { margin-bottom: 0; font-size: clamp(27px, 3vw, 38px); letter-spacing: -.045e
 .article-meta-tag { padding: 5px 10px; }
 .article-updated { color: #969b91; }
 .article-page { width: min(1360px, calc(100% - 96px)); margin-right: 24px; margin-left: 72px; }
-.article-layout { display: grid; grid-template-columns: 230px minmax(0, 760px); justify-content: start; gap: 276px; }
+.article-layout { display: grid; grid-template-columns: auto minmax(0, 760px); justify-content: center; gap: 40px; }
 .article-layout > article { grid-column: 2; min-width: 0; }
 .article-toc { position: sticky; top: 32px; align-self: start; max-height: calc(100vh - 64px); overflow-y: auto; overscroll-behavior-y: contain; padding-top: 58px; scrollbar-width: none; }
 .article-toc::-webkit-scrollbar { display: none; }
