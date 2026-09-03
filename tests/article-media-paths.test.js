@@ -9,7 +9,7 @@ const images = [
 ];
 const codeElement = { className: "language-C++" };
 function element() {
-  return { append() {}, replaceChildren() {}, querySelector: () => null, querySelectorAll: () => [], addEventListener() {} };
+  return { append() {}, replaceChildren() {}, querySelector: () => null, querySelectorAll: () => [], addEventListener() {}, dataset: {} };
 }
 const content = {
   append() {},
@@ -34,6 +34,7 @@ const elements = {
   "#toc-list": element(),
   "#article-toc": element(),
   ".article-toc": element(),
+  ".article-layout": element(),
   ".language-link": element(),
 };
 let requests = 0;
@@ -71,6 +72,11 @@ const context = vm.createContext({
   assert.strictEqual(images[1].src, "./assets/example.png?size=2#preview");
   assert.strictEqual(images[2].src, "https://example.com/image.png");
   assert.strictEqual(codeElement.className, "language-cpp");
+  assert.strictEqual(elements[".article-layout"].dataset.toc, "absent");
+  assert.strictEqual(elements["#article-toc"].hidden, true);
+  vm.runInContext("setTocState(true)", context);
+  assert.strictEqual(elements[".article-layout"].dataset.toc, "present");
+  assert.strictEqual(elements["#article-toc"].hidden, false);
   console.log("article media path checks passed");
 })().catch((error) => {
   console.error(error);

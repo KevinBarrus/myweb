@@ -104,6 +104,9 @@ h2 { margin-bottom: 0; font-size: clamp(27px, 3vw, 38px); letter-spacing: -.045e
 .article-page { width: min(1360px, calc(100% - 96px)); margin-right: 24px; margin-left: 72px; }
 .article-layout { display: grid; grid-template-columns: 230px minmax(0, 760px); justify-content: start; gap: 276px; }
 .article-layout > article { grid-column: 2; min-width: 0; }
+.article-layout[data-toc="pending"] { visibility: hidden; }
+.article-layout[data-toc="absent"] { display: block; width: calc(100vw - 144px); }
+.article-layout[data-toc="absent"] > article { width: min(760px, 100%); margin: 0 auto; }
 .article-toc { position: sticky; top: 32px; align-self: start; max-height: calc(100vh - 64px); overflow-y: auto; overscroll-behavior-y: contain; padding-top: 58px; scrollbar-width: none; }
 .article-toc::-webkit-scrollbar { display: none; }
 .toc-title { margin-bottom: 14px; color: #4f584f; font-size: 16px; font-weight: 700; letter-spacing: .12em; }
@@ -144,6 +147,7 @@ h2 { margin-bottom: 0; font-size: clamp(27px, 3vw, 38px); letter-spacing: -.045e
   .tag-page { padding: 56px 0 82px; }
   .article-back { margin-bottom: 34px; }
   .article-layout { display: block; }
+  .article-layout[data-toc="absent"] { width: 100%; }
   .article-toc { position: static; max-height: none; padding: 0 0 26px; }
   .article-toc[hidden] { display: none; }
   .article-content { padding-top: 34px; font-size: 15px; }
