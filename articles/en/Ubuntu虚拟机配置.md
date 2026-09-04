@@ -1,101 +1,80 @@
 ---
 title: Ubuntu Virtual Machine Configuration
 createdAt: 2025-09-11 23:13
-updatedAt: 2026-05-02 19:43
+updatedAt: 2026-09-04 14:00
 tags:
   - Linux
 ---
 
-# :computer: Ubuntu Virtual Machine Configuration
+# Ubuntu Virtual Machine Configuration
 
-## :one: Download the Lenovo App Store, search for VMware Workstation, and install it
+## Prepare the Installation Environment
 
-## :two: Enter the [Ubuntu Chinese official website](https://cn.ubuntu.com/)
+1. Download the Lenovo App Store, search for VMware Workstation, and install it.
+2. Visit the [Ubuntu Chinese official website](https://cn.ubuntu.com/) and click “Other download methods” at the bottom of the page.
+3. Download Ubuntu 22.04.5 LTS Desktop. LTS stands for Long Term Support. The official provider offers five years of security and maintenance updates, so it is relatively stable.
+4. Install Xunlei, drag the newly downloaded `.torrent` file into the Xunlei window, and click “Download Now.”
 
-## :three: Click “Other download methods” at the bottom of the page
+## Create the Virtual Machine
 
-## :four: Download Ubuntu 22.04.5 LTS (Desktop version)
+1. Open VMware Workstation, click “Create a New Virtual Machine,” and select the “Typical” configuration.
+2. Select “Installer disc image file (ISO),” click “Browse,” and navigate to the location of `ubuntu-22.04.5-desktop-amd64.iso` (usually `C:\迅雷下载\`). Select and open the ISO file. After confirming that the path appears in the input box, continue to the next step. You may choose the name, password, and virtual machine name yourself.
+3. Set the virtual machine's storage location. Avoid the C drive unless it has sufficient free space.
+4. Keep the maximum disk size at the default 20.0 GB. You can expand it later with the tools provided by VMware. For virtual disk storage, select “Store virtual disk as a single file.”
 
-LTS means Long Term Support. The official provider offers five years of security and maintenance updates, so it is relatively stable.
+Using a single file usually provides better read and write performance. Splitting the disk into multiple files is mainly intended for compatibility with older file systems such as FAT32, which do not support individual files larger than 2 GB. NTFS does not have this limitation; the primary advantage of split files is that they are easier to copy using USB drives and other removable devices.
 
-## :five: Install Xunlei. Drag the newly downloaded `.torrent` file into the Xunlei window and click Download Now
+## Install Ubuntu
 
-## :six: Open VMware Workstation, click “Create a New Virtual Machine”, and choose the “Typical” configuration
+1. Set Keyboard layout to English (US) to avoid garbled terminal text and path problems.
+2. Select the following installation options:
 
-## :seven: Select “Installer disc image file (iso)”, click Browse, navigate to the location containing `ubuntu-22.04.5-desktop-amd64.iso` (usually `C:\迅雷下载\`), select and open the ISO file, and confirm that the path is displayed in the input box. The name, password, and virtual machine name on the next step can be arbitrary.
+   - Minimal installation: provides a clean system with less redundancy and lower performance overhead. Normal installation installs software such as LibreOffice, Thunderbird, and games, consuming more disk space and system resources.
+   - Download updates while installing Ubuntu: reduces the update work required after installation.
+   - Install third-party software for graphics and Wi-Fi hardware and additional media formats: installs NVIDIA graphics drivers, Wi-Fi adapter drivers, and media codecs required for formats such as MP3.
 
-## :eight: Location: preferably do not use the C drive unless it has plenty of free space
+3. Under Installation type, select Erase disk and install Ubuntu. This option formats the 20 GB virtual disk just created for the virtual machine and installs Ubuntu; it does not affect the host machine's physical disk.
+4. After entering the system, you may skip Connect Your Online Accounts and Enable Ubuntu Pro.
+5. On the Ready to go page, click Code to install VS Code. This version is maintained by the official Ubuntu software repository and has good compatibility.
+6. Click the “Full Screen” button at the top of the VMware window to fill the screen.
 
-## :nine: Keep the maximum disk size at the default 20.0GB. VMware provides tools for convenient expansion. For virtual disk storage, choose “Store virtual disk as a single file”.
+## Install VMware Tools
 
-PS: This provides better performance. Reading and writing one large file is more efficient than reading and writing dozens of 2GB small files at the same time. Splitting into multiple files is mainly for compatibility with older Windows file systems such as FAT32, because those systems do not support a single file larger than 2GB. Almost all computers now use NTFS, so this limitation no longer exists. Its only advantage is that it is convenient to copy files with USB drives and other removable devices, but this advantage is negligible with today's large-capacity portable hard drives.
-
-## :keycap_ten: Set Keyboard layout to English (US) to avoid terminal garbled text and path problems
-
-## :next_track_button: Select Minimal installation, Download updates while installing Ubuntu, and Install third-party software for graphics and Wi-Fi hardware and additional media formats
-
-Explanation: 1. Minimal installation provides a clean system without redundancy and with minimal performance overhead. Normal installation installs a large amount of software such as the LibreOffice office suite, Thunderbird mail client, and games, consuming disk space and system resources.
-
-2. Downloading updates during installation eliminates the lengthy update operation after installation is complete.
-
-3. Installing third-party software installs some drivers (such as NVIDIA graphics drivers and better Wi-Fi adapter drivers) and media codecs (which allow audio and video files such as MP3 to be played).
-
-## :next_track_button: For Installation type, choose Erase disk and install Ubuntu
-
-This means formatting the empty 20GB virtual hard disk just created for the virtual machine and installing Ubuntu on it.
-
-## :next_track_button: Connect Your Online Accounts and enable Ubuntu Pro on the screen after entering the system can be skipped
-
-## :next_track_button: At Ready to go, click the code icon to install VSCode
-
-The installed version is maintained by the official Ubuntu software repository and has good compatibility.
-
-## :next_track_button: Install VMware drivers
-
-1. Use the shortcut Ctrl+Alt+T to open the terminal.
-
-2. Enter the following command and press Enter:
+1. Use the `Ctrl+Alt+T` shortcut to open the terminal.
+2. Run the following command:
 
 ```bash
 sudo apt install open-vm-tools-desktop
 ```
 
-:arrow_up_small: `sudo`: runs the command with administrator privileges
+Each part of the command means the following:
 
-:arrow_up_small: `apt`: Ubuntu's package management tool
+- `sudo`: runs the command with administrator privileges.
+- `apt`: Ubuntu's package management tool.
+- `install`: the installation command.
+- `open-vm-tools-desktop`: the package to install, which contains the drivers and tools required by the desktop environment.
 
-:arrow_up_small: `install`: the installation command
-
-:arrow_up_small: `open-vm-tools-desktop`: the name of the package to install; it contains the drivers and tools required by the desktop environment
-
-Next, enter the password and confirm the installation. Wait for the installation to finish and restart.
-
-You can enter the restart command in the terminal:
+Next, enter your password and confirm the installation. After the installation finishes, run the following command in the terminal to restart the system:
 
 ```bash
 reboot
 ```
 
-## :next_track_button: Click the “Full Screen” button at the top of the VMware window to fill the screen
+## Handle a 403 Forbidden Error
 
-## :wrench: How to handle a 403 Forbidden error when installing open-vm-tools
+If a 403 Forbidden error occurs while installing `open-vm-tools`, change the software source:
 
-1. Open the terminal and enter:
+1. Open the terminal and run the following command:
 
 ```bash
 software-properties-gtk
 ```
 
-2. Click the drop-down button at the end of the “Download from:” row and choose “Other...”.
-
-3. Click “Select Best Server” in the upper-right corner. The system automatically tests and selects the fastest server for the current network. Choose one and click “Choose Server”.
-
-4. Close the “Software and Updates” window. The system will prompt you to reload the software list; click “Reload”.
-
-5. Run the following command in the terminal again:
+2. Click the drop-down menu at the end of “Download from:” and select “Other...”.
+3. Click “Select Best Server” in the upper-right corner. The system tests the server speeds. Select one of the servers, and then click “Choose Server.”
+4. Close the “Software and Updates” window. When the system prompts you to reload the software list, click “Reload.”
+5. Run the following command in the terminal to update the software source list:
 
 ```bash
 sudo apt update
 ```
-
-This step is required after updating the software source list.
